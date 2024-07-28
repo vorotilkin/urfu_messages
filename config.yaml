@@ -1,0 +1,12 @@
+http:
+  server:
+    addr: "localhost:8080"
+
+db:
+  host: localhost
+  port: 5432
+  user: user
+  password: password
+  database: my_database
+  poolsize: 10
+  sslmode: disable
