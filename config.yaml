@@ -1,9 +1,9 @@
 http:
   server:
-    addr: "localhost:8080"
+    addr: "0.0.0.0:8081"
 
 db:
-  host: localhost
+  host: db
   port: 5432
   user: user
   password: password
