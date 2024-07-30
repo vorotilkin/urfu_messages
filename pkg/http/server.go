@@ -116,6 +116,7 @@ func NewServer(config Config, v *validator.Validate, logger *zap.Logger) *Server
 
 			return nil
 		},
+		HandleError: true,
 	}))
 	s.Validator = &customValidator{validator: v}
 
