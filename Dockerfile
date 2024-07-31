@@ -5,6 +5,11 @@ ENV GOPATH=/
 COPY ./ ./
 
 RUN go mod download
+
+RUN apk add curl
+
+RUN curl -sSf https://atlasgo.sh | sh
+
 RUN go build -o /bin/server ./server/main.go
 
 # Expose the port that the application listens on.

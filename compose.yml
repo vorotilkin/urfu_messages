@@ -8,20 +8,25 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:latest
     restart: always
+    user: postgres
     container_name: postgres_db
     environment:
-      POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: my_database
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   postgres_data:

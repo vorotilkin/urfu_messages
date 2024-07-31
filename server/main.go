@@ -12,13 +12,15 @@ import (
 	"messages/pkg/configuration"
 	"messages/pkg/database"
 	"messages/pkg/http"
+	"messages/pkg/migration"
 )
 
 type config struct {
 	Http struct {
 		Server http.Config
 	}
-	Db database.Config
+	Db        database.Config
+	Migration migration.Config
 }
 
 func newConfig(configuration *configuration.Configuration) (*config, error) {
@@ -46,6 +48,8 @@ func main() {
 		fx.Provide(func(c *config) database.Config {
 			return c.Db
 		}),
+		fx.Provide(func(c *config) migration.Config { return c.Migration }),
+		fx.Provide(fx.Annotate(func(c *config) string { return c.Db.PostgresDSN() }, fx.ResultTags(`name:"dsn"`))),
 		fx.Provide(validator.New),
 		fx.Provide(database.New),
 		fx.Provide(fx.Annotate(message.NewRepository,
@@ -69,6 +73,7 @@ func main() {
 				OnStop:  server.OnStop,
 			})
 		}),
+		fx.Invoke(fx.Annotate(migration.Do, fx.ParamTags("", "", `name:"dsn"`))),
 		fx.Invoke(api.Registry),
 	}
 

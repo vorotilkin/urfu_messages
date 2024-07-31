@@ -5,8 +5,12 @@ http:
 db:
   host: db
   port: 5432
-  user: user
+  user: postgres
   password: password
   database: my_database
   poolsize: 10
   sslmode: disable
+
+migration:
+  path: "./schema/migrations"
+  needMigration: true

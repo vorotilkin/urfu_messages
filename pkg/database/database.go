@@ -34,6 +34,15 @@ type Config struct {
 	SSLMode  string
 }
 
+func (c Config) PostgresDSN() string {
+	connStr := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s", c.User, c.Password, c.Host, c.Port, c.Database)
+	if c.SSLMode == "disable" {
+		connStr += "?sslmode=disable"
+	}
+
+	return connStr
+}
+
 type Database struct {
 	connection *pgxpool.Pool
 }
